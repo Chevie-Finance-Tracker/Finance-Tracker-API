@@ -30,5 +30,39 @@ namespace FinanceTracker.Repositories
 
             return spending;
         }
+
+        public async Task<Spending?> UpdateAsync(int id, Spending spending)
+        {
+            var existingSpending = await _dbContext.Spendings.FindAsync(id);
+
+            if (existingSpending == null)
+            {
+                return null;
+            }
+
+            // We do this because automapper puts the spending domain model as 0
+            spending.Id = existingSpending.Id;
+
+            _dbContext.Entry(existingSpending).CurrentValues.SetValues(spending);
+
+            await _dbContext.SaveChangesAsync();
+
+            return existingSpending;
+        }
+
+        public async Task<Spending?> DeleteAsync(int id)
+        {
+            var existingSpending = await _dbContext.Spendings.FindAsync(id);
+
+            if (existingSpending == null)
+            {
+                return null;
+            }
+
+            _dbContext.Spendings.Remove(existingSpending);
+            await _dbContext.SaveChangesAsync();
+
+            return existingSpending;
+        }
     }
 }
