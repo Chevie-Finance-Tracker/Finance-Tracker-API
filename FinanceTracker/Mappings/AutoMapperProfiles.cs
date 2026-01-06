@@ -10,6 +10,7 @@ namespace FinanceTracker.Mappings
         {
             CreateMap<Spending, SpendingDTO>().ReverseMap();
             CreateMap<AddSpendingRequestDTO, Spending>().ReverseMap();
+            CreateMap<UpdateSpendingRequestDTO, Spending>().ReverseMap();
         }
     }
 }
