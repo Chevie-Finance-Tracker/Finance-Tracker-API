@@ -2,8 +2,12 @@
 using FinanceTracker.Data;
 using FinanceTracker.Models.Domain;
 using FinanceTracker.Models.DTO;
+using FinanceTracker.Models.Validations;
 using FinanceTracker.Repositories;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +55,18 @@ namespace FinanceTracker.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AddSpendingRequestDTO addSpendingRequestDTO)
         {
+            SpendingRequestDTOValidator validator = new SpendingRequestDTOValidator();
+
+            ValidationResult results = validator.Validate(addSpendingRequestDTO);
+
+            if (!results.IsValid)
+            {
+                foreach (var failure in results.Errors)
+                {
+                    return BadRequest("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                }
+            }
+
             var spendingDomainmodel = _mapper.Map<Spending>(addSpendingRequestDTO);
 
             spendingDomainmodel = await _spendingRepository.CreateAsync(spendingDomainmodel);
@@ -64,6 +80,18 @@ namespace FinanceTracker.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateSpendingRequestDTO updateSpendingRequestDTO)
         {
+            UpdateSpendingRequestDTOValidator validator = new UpdateSpendingRequestDTOValidator();
+
+            ValidationResult results = validator.Validate(updateSpendingRequestDTO);
+
+            if (!results.IsValid)
+            {
+                foreach (var failure in results.Errors)
+                {
+                    return BadRequest("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+                }
+            }
+
             var spendingDomainModel = _mapper.Map<Spending>(updateSpendingRequestDTO);
 
             spendingDomainModel = await _spendingRepository.UpdateAsync(id, spendingDomainModel);
