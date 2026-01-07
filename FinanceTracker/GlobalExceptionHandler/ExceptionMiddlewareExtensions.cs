@@ -36,7 +36,7 @@ public static class ExceptionMiddlewareExtensions
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         await context.Response.WriteAsJsonAsync(new
                         {
-                            message = "An unexpected error occurred."
+                            message = "An unexpected error occurred. O_O"
                         });
                         break;
                 }
