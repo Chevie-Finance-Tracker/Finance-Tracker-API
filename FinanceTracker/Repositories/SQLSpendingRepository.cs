@@ -18,6 +18,11 @@ namespace FinanceTracker.Repositories
             return await _dbContext.Spendings.ToListAsync();
         }
 
+        public async Task<List<Spending>> GetAllByUserAsync(string userId)
+        {
+            return await _dbContext.Spendings.Where(x => x.UserId == userId).ToListAsync();
+        }
+
         public async Task<Spending?> GetById(int id)
         {
             return await _dbContext.Spendings.FindAsync(id);
@@ -37,11 +42,12 @@ namespace FinanceTracker.Repositories
 
             if (existingSpending == null)
             {
-                return null;
+                throw new KeyNotFoundException("Spending not found");
             }
 
             // We do this because automapper puts the spending domain model as 0
             spending.Id = existingSpending.Id;
+            spending.UserId = existingSpending.UserId;
 
             _dbContext.Entry(existingSpending).CurrentValues.SetValues(spending);
 
@@ -56,7 +62,7 @@ namespace FinanceTracker.Repositories
 
             if (existingSpending == null)
             {
-                return null;
+                throw new KeyNotFoundException("Spending not found");
             }
 
             _dbContext.Spendings.Remove(existingSpending);
@@ -65,9 +71,5 @@ namespace FinanceTracker.Repositories
             return existingSpending;
         }
 
-        public async Task<List<Spending>> GetByUserAsync(string userId)
-        {
-            return await _dbContext.Spendings.Where(x => x.UserId == userId).ToListAsync();
-        }
     }
 }

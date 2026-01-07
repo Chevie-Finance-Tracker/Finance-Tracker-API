@@ -1,7 +1,10 @@
 using FinanceTracker.Data;
 using FinanceTracker.Mappings;
 using FinanceTracker.Repositories;
+using FinanceTracker.Services.Implementations;
+using FinanceTracker.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
@@ -54,7 +57,12 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 builder.Services.AddDbContext<FinanceTrackerAuthDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnectionString")));
 
+// Repositories
 builder.Services.AddScoped<ISpendingRepository, SQLSpendingRepository>();
+
+// Services
+builder.Services.AddScoped<ISpendingService, SpendingService>();
+builder.Services.AddScoped<SpendingAuthorizationService>();
 
 builder.Services.AddAutoMapper(cfg =>
 {
@@ -62,6 +70,8 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 var app = builder.Build();
+
+app.UseGlobalExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

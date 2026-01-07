@@ -4,6 +4,7 @@ using FinanceTracker.Models.Domain;
 using FinanceTracker.Models.DTO;
 using FinanceTracker.Models.Validations;
 using FinanceTracker.Repositories;
+using FinanceTracker.Services.Interfaces;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
@@ -21,11 +22,13 @@ namespace FinanceTracker.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ISpendingRepository _spendingRepository;
+        private readonly ISpendingService _spendingService;
 
-        public SpendingsController(IMapper mapper, ISpendingRepository spendingRepository)
+        public SpendingsController(IMapper mapper, ISpendingRepository spendingRepository, ISpendingService spendingService)
         {
             _mapper = mapper;
             _spendingRepository = spendingRepository;
+            _spendingService = spendingService;
         }
 
         [HttpGet]
@@ -35,27 +38,9 @@ namespace FinanceTracker.Controllers
 
             if (userId == null) return Unauthorized();
 
-            var spendingsDomain = await _spendingRepository.GetByUserAsync(userId);
-
-            var spendingsDTO = _mapper.Map<List<SpendingDTO>>(spendingsDomain);
+            var spendingsDTO = _spendingService.GetUserSpendingsAsync(userId);
 
             return Ok(spendingsDTO);
-        }
-
-        [HttpGet]
-        [Route("{id:int}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
-        {
-            var spendingDomain = await _spendingRepository.GetById(id);
-
-            if (spendingDomain == null)
-            {
-                return NotFound();
-            }
-
-            var spendingDTO = _mapper.Map<SpendingDTO>(spendingDomain);
-
-            return Ok(spendingDTO);
         }
 
         [HttpPost]
@@ -77,13 +62,7 @@ namespace FinanceTracker.Controllers
 
             if (userId == null) return Unauthorized();
 
-            var spendingDomainmodel = _mapper.Map<Spending>(addSpendingRequestDTO);
-
-            spendingDomainmodel.UserId = userId;
-
-            spendingDomainmodel = await _spendingRepository.CreateAsync(spendingDomainmodel);
-
-            var spendingDTO = _mapper.Map<SpendingDTO>(spendingDomainmodel);
+            var spendingDTO = _spendingService.CreateSpendingAsync(userId, addSpendingRequestDTO);
 
             return Ok(spendingDTO);
         }
@@ -104,16 +83,11 @@ namespace FinanceTracker.Controllers
                 }
             }
 
-            var spendingDomainModel = _mapper.Map<Spending>(updateSpendingRequestDTO);
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-            spendingDomainModel = await _spendingRepository.UpdateAsync(id, spendingDomainModel);
+            if (userId == null) return Unauthorized();
 
-            if (spendingDomainModel == null)
-            {
-                return NotFound();
-            }
-
-            var spendingDTO = _mapper.Map<SpendingDTO>(spendingDomainModel);
+            var spendingDTO = await _spendingService.UpdateSpendingAsync(userId, id, updateSpendingRequestDTO);
 
             return Ok(spendingDTO);
         }
@@ -122,14 +96,11 @@ namespace FinanceTracker.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var spendingDomainModel = await _spendingRepository.DeleteAsync(id);
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-            if (spendingDomainModel == null)
-            {
-                return NotFound();
-            }
+            if (userId == null) return Unauthorized();
 
-            var spendingDTO = _mapper.Map<SpendingDTO>(spendingDomainModel);
+            var spendingDTO = await _spendingService.DeleteSpendingAsync(userId, id);
 
             return Ok(spendingDTO);
         }

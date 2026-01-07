@@ -5,7 +5,7 @@ namespace FinanceTracker.Repositories
     public interface ISpendingRepository
     {
         Task<List<Spending>> GetAllAsync();
-        Task<List<Spending>> GetByUserAsync(string userId);
+        Task<List<Spending>> GetAllByUserAsync(string userId);
         Task<Spending?> GetById(int id);
         Task<Spending> CreateAsync(Spending spending);
         Task<Spending?> UpdateAsync(int id, Spending spending);
