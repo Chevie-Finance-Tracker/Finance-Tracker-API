@@ -64,5 +64,10 @@ namespace FinanceTracker.Repositories
 
             return existingSpending;
         }
+
+        public async Task<List<Spending>> GetByUserAsync(string userId)
+        {
+            return await _dbContext.Spendings.Where(x => x.UserId == userId).ToListAsync();
+        }
     }
 }

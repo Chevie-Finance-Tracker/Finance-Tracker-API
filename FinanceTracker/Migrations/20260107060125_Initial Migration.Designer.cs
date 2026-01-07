@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceTracker.Migrations
 {
     [DbContext(typeof(FinanceTrackerDbContext))]
-    [Migration("20260106063417_Initial Migration")]
+    [Migration("20260107060125_Initial Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -44,6 +44,10 @@ namespace FinanceTracker.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

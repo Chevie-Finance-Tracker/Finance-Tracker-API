@@ -6,6 +6,7 @@ using FinanceTracker.Models.Validations;
 using FinanceTracker.Repositories;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ namespace FinanceTracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SpendingsController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -27,9 +29,13 @@ namespace FinanceTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetByUser()
         {
-            var spendingsDomain = await _spendingRepository.GetAllAsync();
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null) return Unauthorized();
+
+            var spendingsDomain = await _spendingRepository.GetByUserAsync(userId);
 
             var spendingsDTO = _mapper.Map<List<SpendingDTO>>(spendingsDomain);
 
@@ -67,7 +73,13 @@ namespace FinanceTracker.Controllers
                 }
             }
 
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId == null) return Unauthorized();
+
             var spendingDomainmodel = _mapper.Map<Spending>(addSpendingRequestDTO);
+
+            spendingDomainmodel.UserId = userId;
 
             spendingDomainmodel = await _spendingRepository.CreateAsync(spendingDomainmodel);
 
