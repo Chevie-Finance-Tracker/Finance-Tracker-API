@@ -74,3 +74,12 @@ button:hover {
 button:active {
     transform: scale(0.98);
 }
+
+#message {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 0.9rem;
+    min-height: 1.2em;
+    color: red;
+
+}
