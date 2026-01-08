@@ -32,6 +32,6 @@ document.getElementById('registrationForm').addEventListener('submit', function(
     .catch(error => {
         // Handle errors like network issues or the "already taken" message
         messageDiv.className = 'error';
-        messageDiv.textContent = 'Error: ' + error.message;
+        messageDiv.textContent = 'Error::: ' + error.message;
     });
 });
