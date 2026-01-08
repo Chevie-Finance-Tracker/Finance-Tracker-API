@@ -10,6 +10,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+//allows communication from the port
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:8000", // Allow Python server
+                                             "http://127.0.0.1:8000",
+                                             "http://localhost:5500",
+                                             "http://127.0.0.1:5500") // Allow VS Code Live Server
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
+});
 
 // Add services to the container.
 
@@ -82,10 +98,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//CORS
+app.UseRouting();
+app.UseCors(MyAllowSpecificOrigins);
+
 app.UseAuthorization();
 
 app.MapIdentityApi<IdentityUser>();
 
 app.MapControllers();
 
-app.Run();
+app.Run(); 
