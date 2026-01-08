@@ -27,6 +27,9 @@ namespace FinanceTracker.Controllers
             _spendingService = spendingService;
         }
 
+        /// <summary>
+        /// Get logged in user's spendings
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetByUser()
         {
