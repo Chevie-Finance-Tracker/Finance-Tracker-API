@@ -1,0 +1,1 @@
+Install Live Server extension on vs code and open index.html using it
