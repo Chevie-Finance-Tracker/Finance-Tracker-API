@@ -20,14 +20,10 @@ namespace FinanceTracker.Controllers
     [Authorize]
     public class SpendingsController : ControllerBase
     {
-        private readonly IMapper _mapper;
-        private readonly ISpendingRepository _spendingRepository;
         private readonly ISpendingService _spendingService;
 
-        public SpendingsController(IMapper mapper, ISpendingRepository spendingRepository, ISpendingService spendingService)
+        public SpendingsController(ISpendingService spendingService)
         {
-            _mapper = mapper;
-            _spendingRepository = spendingRepository;
             _spendingService = spendingService;
         }
 
