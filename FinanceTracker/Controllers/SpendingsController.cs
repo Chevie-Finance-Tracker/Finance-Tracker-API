@@ -37,7 +37,7 @@ namespace FinanceTracker.Controllers
 
             if (userId == null) return Unauthorized();
 
-            var spendingsDTO = _spendingService.GetUserSpendingsAsync(userId);
+            var spendingsDTO = await _spendingService.GetUserSpendingsAsync(userId);
 
             return Ok(spendingsDTO);
         }
@@ -61,7 +61,7 @@ namespace FinanceTracker.Controllers
 
             if (userId == null) return Unauthorized();
 
-            var spendingDTO = _spendingService.CreateSpendingAsync(userId, addSpendingRequestDTO);
+            var spendingDTO = await _spendingService.CreateSpendingAsync(userId, addSpendingRequestDTO);
 
             return Ok(spendingDTO);
         }
