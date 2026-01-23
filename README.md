@@ -1,5 +1,5 @@
 ## UI Setup:
-make a copy of .env.example and rename it into .env
+make a copy of .env.example and rename it into .env<br>
 run npm install
 
 ## Development server
