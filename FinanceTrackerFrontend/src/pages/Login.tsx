@@ -33,7 +33,7 @@ export default function LoginPage() {
     return (
         <>
             <motion.div 
-                className="flex flex-col items-center justify-center"
+                className="flex flex-col items-center justify-center min-h-screen -mt-10"
                 initial={{ opacity: 0, y: 20 }}   // start hidden and slightly down
                 animate={{ opacity: 1, y: 0 }}    // animate to fully visible and original position
                 exit={{ opacity: 0, y: -20 }}     // when leaving, fade out and move up
@@ -41,11 +41,12 @@ export default function LoginPage() {
             >
                 <h1 className="mb-10">Lorem Ipsum!</h1>
 
-                <div className="w-full max-w-md">
+                <div className="">
                     <div className="
                         flex flex-col gap-4
                         w-md
-                        container
+                        containercolor
+                        containerround
                         "
                     >
                         <ThemeProvider theme={darkTheme}>
