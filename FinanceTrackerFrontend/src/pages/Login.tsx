@@ -1,9 +1,30 @@
 import LoginForm from "../components/LoginForm"
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { TextField } from "@mui/material";
+import { useRef } from "react";
+import Button from '@mui/material/Button';
+import { useState } from "react";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 export default function LoginPage() {
     const navigate = useNavigate();
+    
+    const emailRef = useRef(null);
+    const passwordRef = useRef(null);
+
+    async function handleLogin() {
+        navigate("/dashboard");
+
+        // const res = await login(emailRef.current.value, passwordRef.current.value)
+        // console.log(res);
+    }
 
     function goToRegister() {
         navigate("/register");
@@ -21,7 +42,55 @@ export default function LoginPage() {
                 <h1 className="mb-10">Lorem Ipsum!</h1>
 
                 <div className="w-full max-w-md">
-                    <LoginForm /> 
+                    <div className="
+                        flex flex-col gap-4
+                        w-md
+                        container
+                        "
+                    >
+                        <ThemeProvider theme={darkTheme}>
+                            <TextField 
+                                inputRef={emailRef}
+                                id="standard-basic" 
+                                label="Email" 
+                                variant="outlined" 
+                                color="info"
+                            />
+
+                            <TextField 
+                                inputRef={passwordRef}
+                                fullWidth
+                                id="standard-basic" 
+                                label="Password" 
+                                variant="outlined" 
+                                color="info"
+                                type="password"
+                            />
+                            <div className="text-right -mt-2">
+                                <Button 
+                                    size="small"
+                                    sx={{
+                                        color: "white",
+                                        backgroundColor: "transparent",
+                                    }}
+                                >
+                                    <p className="underline">Forgot Password</p>
+                                </Button>
+                            </div>
+                        </ThemeProvider>
+                        
+                        <div className="mt-2">
+                            <Button 
+                                fullWidth
+                                variant="contained" 
+                                onClick={handleLogin}
+                                sx= {{ height: 45 }}
+                            >
+                                Login
+                            </Button>
+                        </div>
+
+                    </div>
 
                     <div className="mt-2">
                         <span className="mr-1">

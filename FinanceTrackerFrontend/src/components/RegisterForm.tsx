@@ -26,9 +26,8 @@ export default function RegisterForm() {
         <div className="
             p-4
             flex flex-col gap-4
-            border-1 border-solid border-[#313131]
-            bg-[#0f1214] rounded-xl
             w-full
+            container
             "
         >
             <ThemeProvider theme={darkTheme}>

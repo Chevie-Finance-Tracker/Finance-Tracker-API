@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import Button from '@mui/material/Button';
 import { TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { login } from "../api/auth";
 
@@ -11,21 +12,25 @@ const darkTheme = createTheme({
 });
 
 export default function LoginForm() {
+    const navigate = useNavigate();
+
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
     async function handleLogin() {
-        const res = await login(emailRef.current.value, passwordRef.current.value)
-        console.log(res);
+        setTimeout(() => {
+            navigate("/dashboard");
+        }, 500); // matches animation duration
+
+        // const res = await login(emailRef.current.value, passwordRef.current.value)
+        // console.log(res);
     }
 
     return (
         <div className="
-            p-4
             flex flex-col gap-4
-            border-1 border-solid border-[#313131]
-            bg-[#0f1214] rounded-xl
             w-md
+            container
             "
         >
             <ThemeProvider theme={darkTheme}>
