@@ -25,7 +25,7 @@ export default function LoginForm() {
             flex flex-col gap-4
             border-1 border-solid border-[#313131]
             bg-[#0f1214] rounded-xl
-            w-full
+            w-md
             "
         >
             <ThemeProvider theme={darkTheme}>
@@ -46,15 +46,29 @@ export default function LoginForm() {
                     color="info"
                     type="password"
                 />
+                <div className="text-right">
+                    <Button 
+                        size="small"
+                        sx={{
+                            color: "white"
+                        }}
+                    >
+                        Forgot Password
+                    </Button>
+                </div>
             </ThemeProvider>
+            
+            <div className="mt-2">
+                <Button 
+                    fullWidth
+                    variant="contained" 
+                    onClick={handleLogin}
+                    sx= {{ height: 45 }}
+                >
+                    Login
+                </Button>
+            </div>
 
-            <Button 
-                variant="contained" 
-                onClick={handleLogin}
-                sx= {{ height: 45 }}
-            >
-                Login
-            </Button>
         </div>
     );
 }
