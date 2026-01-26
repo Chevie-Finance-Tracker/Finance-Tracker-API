@@ -5,8 +5,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { register } from "../api/auth";
 import CssBaseline from '@mui/material/CssBaseline';
 
-const baseUrl = import.meta.env.VITE_API_URL;
-
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
