@@ -3,9 +3,6 @@ import Button from '@mui/material/Button';
 import { TextField } from "@mui/material";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { login } from "../api/auth";
-import CssBaseline from '@mui/material/CssBaseline';
-
-const baseUrl = import.meta.env.VITE_API_URL;
 
 const darkTheme = createTheme({
   palette: {

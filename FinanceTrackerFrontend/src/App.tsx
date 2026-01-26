@@ -1,14 +1,18 @@
 import './App.css'
-import RegisterForm from './components/RegisterForm';
-import LoginForm from './components/LoginForm';
+import LoginPage from './pages/Login';
+import RegisterPage from './pages/Register';
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <div>
-        <RegisterForm />
-        <LoginForm />
-      </div>
+      <Routes>
+      {/* default route = entry page */}
+      <Route path="/" element={<LoginPage />} />
+
+      <Route path="/register" element={<RegisterPage />} />
+      
+      </Routes>
     </>
   )
 }
