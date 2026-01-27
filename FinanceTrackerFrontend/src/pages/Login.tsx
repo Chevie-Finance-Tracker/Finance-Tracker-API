@@ -1,4 +1,3 @@
-import LoginForm from "../components/LoginForm"
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -6,6 +5,11 @@ import { TextField } from "@mui/material";
 import { useRef } from "react";
 import Button from '@mui/material/Button';
 import { useState } from "react";
+import { login } from "../api/auth";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const darkTheme = createTheme({
   palette: {
@@ -15,15 +19,21 @@ const darkTheme = createTheme({
 
 export default function LoginPage() {
     const navigate = useNavigate();
+
+    const [showPassword, setShowPassword] = useState(false);
     
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
-    async function handleLogin() {
-        navigate("/dashboard");
+    function handleClickShowPassword() {
+        setShowPassword(!showPassword);
+    }
 
-        // const res = await login(emailRef.current.value, passwordRef.current.value)
-        // console.log(res);
+    async function handleLogin() {
+        // navigate("/dashboard");
+
+        const res = await login(emailRef.current.value, passwordRef.current.value)
+        console.log(res);
     }
 
     function goToRegister() {
@@ -65,7 +75,24 @@ export default function LoginPage() {
                                 label="Password" 
                                 variant="outlined" 
                                 color="info"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
+                                slotProps={{
+                                    input: {
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label={
+                                                        showPassword ? 'hide the password' : 'display the password'
+                                                    }
+                                                    onClick={handleClickShowPassword}
+                                                    edge="end"
+                                                >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }
+                                }}
                             />
                             <div className="text-right -mt-2">
                                 <Button 
