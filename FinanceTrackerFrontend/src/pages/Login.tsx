@@ -5,11 +5,15 @@ import { TextField } from "@mui/material";
 import { useRef } from "react";
 import Button from '@mui/material/Button';
 import { useState } from "react";
-import { login } from "../api/auth";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
+// api
+import { login } from "../api/auth";
+import { getSpendings } from "../api/spendings";
+
 
 const darkTheme = createTheme({
   palette: {
@@ -21,6 +25,8 @@ export default function LoginPage() {
     const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = useState(false);
+    const [isEmailEmpty, setIsEmailEmpty] = useState(false);
+    const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
     
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -30,18 +36,30 @@ export default function LoginPage() {
     }
 
     async function handleLogin() {
-        // navigate("/dashboard");
+        setIsEmailEmpty(!emailRef.current?.value);
+        setIsPasswordEmpty(!passwordRef.current?.value);
+
+        if (!emailRef.current?.value || !passwordRef.current?.value) return;
 
         const res = await login(emailRef.current.value, passwordRef.current.value)
-        console.log(res);
+
+        if (res) {
+            // TODO: AUTO REFRESH TOKEN
+            localStorage.setItem("authData", JSON.stringify(res));
+        }
     }
 
     function goToRegister() {
         navigate("/register");
     }
+
+    async function testButton() {
+        await getSpendings();
+    }
     
     return (
         <>
+            <button onClick={testButton}>AAAAAAAAAAAAA</button>
             <motion.div 
                 className="flex flex-col items-center justify-center min-h-screen -mt-10"
                 initial={{ opacity: 0, y: 20 }}   // start hidden and slightly down
@@ -66,6 +84,8 @@ export default function LoginPage() {
                                 label="Email" 
                                 variant="outlined" 
                                 color="info"
+                                error={isEmailEmpty}
+                                helperText={isEmailEmpty ? "Email empty" : ""}
                             />
 
                             <TextField 
@@ -76,6 +96,8 @@ export default function LoginPage() {
                                 variant="outlined" 
                                 color="info"
                                 type={showPassword ? "text" : "password"}
+                                error={isPasswordEmpty}
+                                helperText={isPasswordEmpty ? "Password empty" : ""}
                                 slotProps={{
                                     input: {
                                         endAdornment: (
