@@ -31,11 +31,11 @@ export default function LoginPage() {
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
-    function handleClickShowPassword() {
+    const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     }
 
-    async function handleLogin() {
+    const handleLogin = async () => {
         setIsEmailEmpty(!emailRef.current?.value);
         setIsPasswordEmpty(!passwordRef.current?.value);
 
@@ -46,20 +46,16 @@ export default function LoginPage() {
         if (res) {
             // TODO: AUTO REFRESH TOKEN
             localStorage.setItem("authData", JSON.stringify(res));
+            navigate("/dashboard");
         }
     }
 
-    function goToRegister() {
-        navigate("/register");
-    }
-
-    async function testButton() {
+    const testButton = async () => {
         await getSpendings();
     }
-    
+
     return (
         <>
-            <button onClick={testButton}>AAAAAAAAAAAAA</button>
             <motion.div 
                 className="flex flex-col items-center justify-center min-h-screen -mt-10"
                 initial={{ opacity: 0, y: 20 }}   // start hidden and slightly down
@@ -71,74 +67,88 @@ export default function LoginPage() {
 
                 <div className="">
                     <div className="
-                        flex flex-col gap-4
                         w-md
                         containercolor
                         containerround
                         "
                     >
-                        <ThemeProvider theme={darkTheme}>
-                            <TextField 
-                                inputRef={emailRef}
-                                id="standard-basic" 
-                                label="Email" 
-                                variant="outlined" 
-                                color="info"
-                                error={isEmailEmpty}
-                                helperText={isEmailEmpty ? "Email empty" : ""}
-                            />
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault(); // stop page reload
+                                handleLogin();
+                            }}
+                        >
+                            <ThemeProvider theme={darkTheme}>
+                                <TextField 
+                                    inputRef={emailRef}
+                                    fullWidth
+                                    id="standard-basic" 
+                                    label="Email" 
+                                    variant="outlined" 
+                                    color="info"
+                                    error={isEmailEmpty}
+                                    helperText={isEmailEmpty ? "Email empty" : ""}
+                                />
 
-                            <TextField 
-                                inputRef={passwordRef}
-                                fullWidth
-                                id="standard-basic" 
-                                label="Password" 
-                                variant="outlined" 
-                                color="info"
-                                type={showPassword ? "text" : "password"}
-                                error={isPasswordEmpty}
-                                helperText={isPasswordEmpty ? "Password empty" : ""}
-                                slotProps={{
-                                    input: {
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label={
-                                                        showPassword ? 'hide the password' : 'display the password'
-                                                    }
-                                                    onClick={handleClickShowPassword}
-                                                    edge="end"
-                                                >
-                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
-                                    }
-                                }}
-                            />
-                            <div className="text-right -mt-2">
+                                <div className="mt-4">
+                                    <TextField 
+                                        inputRef={passwordRef}
+                                        fullWidth
+                                        id="standard-basic" 
+                                        label="Password" 
+                                        variant="outlined" 
+                                        color="info"
+                                        type={showPassword ? "text" : "password"}
+                                        error={isPasswordEmpty}
+                                        helperText={isPasswordEmpty ? "Password empty" : ""}
+                                        slotProps={{
+                                            input: {
+                                                endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        <IconButton
+                                                            aria-label={
+                                                                showPassword ? 'hide the password' : 'display the password'
+                                                            }
+                                                            onClick={handleClickShowPassword}
+                                                            edge="end"
+                                                        >
+                                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                )
+                                            }
+                                        }}
+                                    />
+
+                                </div>
+                                    
+                                <div className="text-right mt-1">
+                                    <Button 
+                                        size="small"
+                                        sx={{
+                                            color: "white",
+                                            backgroundColor: "transparent",
+                                        }}
+                                    >
+                                        <p className="underline">Forgot Password</p>
+                                    </Button>
+                                </div>
+                            </ThemeProvider>
+                            
+                            <div className="mt-2">
                                 <Button 
-                                    size="small"
-                                    sx={{
-                                        color: "white",
-                                        backgroundColor: "transparent",
-                                    }}
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained" 
+                                    onClick={handleLogin}
+                                    sx= {{ height: 45 }}
                                 >
-                                    <p className="underline">Forgot Password</p>
+                                    Login
                                 </Button>
                             </div>
-                        </ThemeProvider>
-                        
-                        <div className="mt-2">
-                            <Button 
-                                fullWidth
-                                variant="contained" 
-                                onClick={handleLogin}
-                                sx= {{ height: 45 }}
-                            >
-                                Login
-                            </Button>
-                        </div>
+
+                        </form>
+
 
                     </div>
 
@@ -146,7 +156,7 @@ export default function LoginPage() {
                         <span className="mr-1">
                             Don't have an account? 
                         </span>
-                        <button onClick={goToRegister} className="cursor-pointer underline">
+                        <button onClick={() => navigate("/register")} className="cursor-pointer underline">
                             Sign Up
                         </button>
                     </div>
