@@ -66,11 +66,21 @@ builder.Services.AddIdentityCore<IdentityUser>()
     .AddApiEndpoints();
 
 // Dbcontext
+//builder.Services.AddDbContext<FinanceTrackerDbContext>(options =>
+//options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionString")));
+
 builder.Services.AddDbContext<FinanceTrackerDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
+options.UseNpgsql(
+    builder.Configuration.GetConnectionString("DefaultConnectionString"),
+    npgsqlOptions => npgsqlOptions.CommandTimeout(180)
+));
+
+//builder.Services.AddDbContext<FinanceTrackerDbContext>(options =>
+//    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionString"),
+//        npgsqlOptions => npgsqlOptions.EnableRetryOnFailure()));
 
 builder.Services.AddDbContext<FinanceTrackerAuthDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnectionString")));
+options.UseNpgsql(builder.Configuration.GetConnectionString("AuthConnectionString")));
 
 // Repositories
 builder.Services.AddScoped<ISpendingRepository, SQLSpendingRepository>();
