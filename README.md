@@ -1,6 +1,16 @@
-## UI Setup:
-* Make a copy of .env.example and rename it into .env<br>
-* run npm install
+# ⚙️ Prerequisites
 
-## Development server
-Run `npm run dev` for a dev server.
+### Make sure u have installed: <br>
+[.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) <br>
+This API uses an SQL database. Additional setup might be needed when using some different databases.
+
+# Installation
+### Restore Dependencies
+`dotnet restore`
+### Configure Environment Variables
+Update appsettings.json<br>
+`"DefaultConnectionString"` and `"AuthConnectionString"` to your Connection String
+### Run Database Migrations
+`dotnet ef database update`
+### Run API
+`dotnet run`
