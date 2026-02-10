@@ -14,3 +14,5 @@ Update appsettings.json<br>
 `dotnet ef database update`
 ### Run API
 `dotnet run`
+### Run Swagger UI
+Open swagger http://localhost:5018/swagger
