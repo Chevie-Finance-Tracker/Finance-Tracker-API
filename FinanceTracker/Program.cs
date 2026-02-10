@@ -65,6 +65,8 @@ builder.Services.AddIdentityCore<IdentityUser>()
     .AddEntityFrameworkStores<FinanceTrackerAuthDbContext>()
     .AddApiEndpoints();
 
+// TODO: make switch statement for different db providers (db provider should be in appsettings.json)
+
 // Dbcontext
 builder.Services.AddDbContext<FinanceTrackerDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
